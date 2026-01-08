@@ -1,0 +1,17 @@
+# E-Commerce Data Analysis Requirements
+# Python 3.8+
+
+# Data manipulation and analysis
+pandas>=1.3.0
+numpy>=1.21.0
+
+# Visualization
+matplotlib>=3.4.0
+plotly>=5.0.0
+
+# Dashboard
+streamlit>=1.28.0
+
+# Jupyter notebook support
+jupyter>=1.0.0
+ipython>=7.0.0
