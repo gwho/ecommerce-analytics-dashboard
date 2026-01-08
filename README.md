@@ -1,5 +1,10 @@
 # E-Commerce Business Analytics
 
+[![Code Review](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/code-review.yml/badge.svg)](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/code-review.yml)
+[![CI Pipeline](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/ci.yml/badge.svg)](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/ci.yml)
+[![Claude Code Review](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/claude-code-review.yml/badge.svg)](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/claude-code-review.yml)
+[![Dependency Review](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/dependency-review.yml/badge.svg)](https://github.com/gwho/ecommerce-analytics-dashboard/actions/workflows/dependency-review.yml)
+
 A comprehensive, configurable analysis framework for e-commerce business performance metrics including revenue trends, customer behavior, product performance, and operational efficiency.
 
 ## Overview
