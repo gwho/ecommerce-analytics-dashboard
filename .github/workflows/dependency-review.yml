@@ -1,0 +1,110 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches:
+      - main
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:
+
+jobs:
+  dependency-check:
+    name: Check Dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install pip-audit
+        run: |
+          pip install pip-audit safety
+
+      - name: Audit dependencies for vulnerabilities
+        run: |
+          pip-audit -r requirements.txt --desc || echo "::warning::Vulnerabilities found in dependencies"
+        continue-on-error: true
+
+      - name: Check with Safety
+        run: |
+          safety check -r requirements.txt --json > safety-report.json || true
+          if [ -s safety-report.json ]; then
+            echo "::warning::Security issues found. Check safety-report.json artifact."
+          fi
+        continue-on-error: true
+
+      - name: Upload safety report
+        uses: actions/upload-artifact@v3
+        with:
+          name: safety-report
+          path: safety-report.json
+        if: always()
+
+  dependency-graph:
+    name: Dependency Graph
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          pip install pipdeptree
+
+      - name: Generate dependency tree
+        run: |
+          echo "# Dependency Tree" > dependency-tree.md
+          echo "" >> dependency-tree.md
+          echo '```' >> dependency-tree.md
+          pipdeptree >> dependency-tree.md
+          echo '```' >> dependency-tree.md
+
+      - name: Upload dependency tree
+        uses: actions/upload-artifact@v3
+        with:
+          name: dependency-tree
+          path: dependency-tree.md
+
+  outdated-check:
+    name: Check Outdated Packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Check for outdated packages
+        run: |
+          echo "# Outdated Packages" > outdated.md
+          echo "" >> outdated.md
+          echo "Checking for package updates..." >> outdated.md
+          echo "" >> outdated.md
+          pip list --outdated >> outdated.md || echo "All packages are up to date" >> outdated.md
+
+      - name: Upload outdated packages report
+        uses: actions/upload-artifact@v3
+        with:
+          name: outdated-packages
+          path: outdated.md
